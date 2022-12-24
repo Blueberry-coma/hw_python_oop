@@ -1,3 +1,6 @@
+from typing import Type, Dict, List
+
+
 class InfoMessage:
     """Информационное сообщение о тренировке."""
     def __init__(self,
@@ -126,13 +129,15 @@ class Swimming(Training):
                 * self.CALORIES_SWIM_CONST_02 * self.weight * self.duration)
 
 
-def read_package(workout_type: str, data: list) -> Training:
-    """Прочитать данные полученные от датчиков."""
-    training_types: dict = {'SWM': Swimming,
-                            'RUN': Running,
-                            'WLK': SportsWalking}
-    training_example: Training = training_types[workout_type](*data)
-    return training_example
+def read_package(workout_type: str, data: List[float]) -> Training:
+    """Импортировал List, Dict, Type из typing"""
+    training_types: Dict[str, Type[Training]] = {
+        'SWM': Swimming,
+        'RUN': Running,
+        'WLK': SportsWalking}
+    if workout_type in training_types:
+        return training_types[workout_type](*data)
+    raise ValueError('Получение неожиданной тренировки')
 
 
 def main(training: Training) -> None:
